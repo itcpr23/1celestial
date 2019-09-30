@@ -40,7 +40,9 @@ public class main extends javax.swing.JFrame {
             DefaultTableModel table = (DefaultTableModel)tablej.getModel();
             table.setRowCount(0);
             while(rs.next()){
-                table.addRow(new Object[]{rs.getInt("ID"),rs.getString("Product Name"),rs.getInt("Quantity"),rs.getString("Price")});
+                
+               table.addRow(new Object[]{rs.getInt("ID"),rs.getString("Product Name"),rs.getInt("Quantity"),rs.getString("Price")});
+             size.setText(tablej.getRowCount() + "");
             }
             
             
@@ -75,8 +77,13 @@ public class main extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablej = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        size = new javax.swing.JLabel();
 
         jPanel2.setBackground(new java.awt.Color(0, 153, 255));
+        jPanel2.setMaximumSize(new java.awt.Dimension(400, 300));
+        jPanel2.setMinimumSize(new java.awt.Dimension(400, 300));
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel3.setText("PRODUCT");
@@ -182,19 +189,36 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jButton3.setText("DELETE");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("No. of Products:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(219, 219, 219)))
-                .addContainerGap(70, Short.MAX_VALUE))
+                        .addGap(219, 219, 219))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -202,9 +226,18 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(0, 26, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton1)
+                            .addComponent(jButton3)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 23, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -237,11 +270,50 @@ int gi=jaymar.addProduct(pname, qua, pr);
 showRecords();
 if(gi==1){
     JOptionPane.showMessageDialog(rootPane,"ADDED");
+     adding.setVisible(false);
+     adding.setAlwaysOnTop(false);
+     
 }else{
     
 }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int selRow = tablej.getSelectedRow();
+        if (selRow != -1) {// meaning the row is valid
+            int column = 0;  // the ID is located at the first column
+            String id = tablej
+                    .getValueAt(selRow, column).toString();
+            int ans = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to delete this product?",
+                    "Delete Confirmation",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (ans == JOptionPane.YES_OPTION) {    // YES
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");// the connector
+                    String conURL = "jdbc:mysql://localhost/celestialreg?"
+                            + "user=root&password=";
+                    Connection con = DriverManager.getConnection(conURL);
+                    PreparedStatement pstmt = con.prepareStatement("DELETE FROM addproduct WHERE id = ? ");
+                    pstmt.setString(1, id);
+                    pstmt.executeUpdate();
+
+                    showRecords();
+
+                } catch (ClassNotFoundException | SQLException ex) {
+                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } else { // meaning if the row is invalid ( -1 )
+            JOptionPane.showMessageDialog(null, "Please select a row to be deleted",
+                    "No record selected",
+                    JOptionPane.WARNING_MESSAGE);
+            // TODO add your handling code here:
+        }                    
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -282,6 +354,8 @@ if(gi==1){
     private javax.swing.JFrame adding;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -293,6 +367,7 @@ if(gi==1){
     private javax.swing.JTextField prodname;
     private javax.swing.JFormattedTextField prodprice;
     private javax.swing.JSpinner qty;
+    private javax.swing.JLabel size;
     private javax.swing.JTable tablej;
     // End of variables declaration//GEN-END:variables
 }

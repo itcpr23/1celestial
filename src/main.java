@@ -28,6 +28,32 @@ public class main extends javax.swing.JFrame {
         initComponents();
         showRecords();
     }
+    public void search(){
+        String prodname = sh.getText();
+        try{
+            
+            String sql = "select * from addproduct where Product_Name like ?;";
+           Class.forName("com.mysql.jdbc.Driver");
+           Connection conn = (Connection)DriverManager.getConnection("jdbc:mysql://localhost/celestialreg?", "root", "");
+           PreparedStatement pstmt = conn.prepareStatement(sql);
+           pstmt.setString(1, "%"+prodname+"%");
+           ResultSet rs = pstmt.executeQuery();
+           DefaultTableModel tblj = (DefaultTableModel)tablej.getModel();
+           tblj.setRowCount(0);
+           if(!rs.isBeforeFirst()){
+               tblj.addRow(new Object[]{"NO DATA", "NO DATA", "NO DATA", "NO DATA"});
+           }else{
+               while(rs.next()){
+                   
+                   tblj.addRow(new Object[]{rs.getString("ID"),rs.getString("Product_Name"),rs.getString("Quantity"),rs.getString("Price")});
+               }
+           }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public void showRecords(){
         try{
             Class.forName("com.mysql.jdbc.Driver");
@@ -84,6 +110,8 @@ public class main extends javax.swing.JFrame {
         size = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        sh = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
 
         adding.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         adding.setMinimumSize(new java.awt.Dimension(400, 300));
@@ -238,6 +266,14 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        sh.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                shKeyReleased(evt);
+            }
+        });
+
+        jLabel7.setText("PRODUCT NAME:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -246,11 +282,6 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,7 +289,17 @@ public class main extends javax.swing.JFrame {
                         .addComponent(jButton1)
                         .addGap(34, 34, 34)
                         .addComponent(jButton3)
-                        .addGap(93, 93, 93))))
+                        .addGap(93, 93, 93))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(sh))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(240, 240, 240)
                 .addComponent(jButton6)
@@ -273,8 +314,12 @@ public class main extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(38, 38, 38)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sh, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -286,7 +331,7 @@ public class main extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(size, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
+                .addGap(322, 322, 322)
                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,6 +477,10 @@ try{
         // TODO add your handling code here:
     }//GEN-LAST:event_svActionPerformed
 
+    private void shKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_shKeyReleased
+search();        // TODO add your handling code here:
+    }//GEN-LAST:event_shKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -480,6 +529,7 @@ try{
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -487,6 +537,7 @@ try{
     private javax.swing.JTextField prodname;
     private javax.swing.JFormattedTextField prodprice;
     private javax.swing.JSpinner qty;
+    private javax.swing.JTextField sh;
     private javax.swing.JLabel size;
     private javax.swing.JButton sv;
     private javax.swing.JTable tablej;

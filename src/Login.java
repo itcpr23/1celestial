@@ -214,6 +214,12 @@ public void log_inACc(){
         setMinimumSize(new java.awt.Dimension(400, 300));
         setUndecorated(true);
 
+        unlog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                unlogActionPerformed(evt);
+            }
+        });
+
         pwlog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pwlogActionPerformed(evt);
@@ -306,9 +312,8 @@ public void log_inACc(){
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(150, 150, 150))))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(138, 138, 138))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,6 +437,10 @@ System.exit(0);        // TODO add your handling code here:
     private void cpwregMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cpwregMouseClicked
 cpwreg.setBackground(Color.white);        // TODO add your handling code here:
     }//GEN-LAST:event_cpwregMouseClicked
+
+    private void unlogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_unlogActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_unlogActionPerformed
 
     /**
      * @param args the command line arguments

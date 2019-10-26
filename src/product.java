@@ -58,6 +58,23 @@ public int deleteProduct(String product_name, int quantity, String price){
             Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
         }
         return c;
-    }    
+    }
+public int addQuantity(int id, Object quantity){
+    int gi = 0;
+    try{
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection con = (Connection)DriverManager.getConnection("jdbc:mysql://localhost/celestialreg?", "root", "");
+        PreparedStatement pstmt = con.prepareStatement("update addproduct set Quantity=(Quantity+?)where ID=?");
+        pstmt.setObject(1, quantity);
+        pstmt.setInt(2, id);
+        pstmt.executeUpdate();
+    }   catch (ClassNotFoundException ex) {
+            Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(product.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    return gi;
+}
 }
 
